@@ -19,4 +19,8 @@ public class Road {
     public boolean isValidPosition(int position) {
         return position >= 0 && position < occupied.length;
     }
+
+    public boolean[] getOccupied() {
+        return this.occupied;
+    }
 }

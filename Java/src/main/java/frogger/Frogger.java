@@ -62,8 +62,37 @@ public class Frogger {
      * @return true if record successful, else false.
      */
     public boolean recordMyself() {
-      boolean success = records.addRecord(firstName, lastName, phoneNumber, zipCode, state, gender);
+    // In the game logic or controller
+        PlayerDataService playerDataService = new PlayerDataService(records);
+        boolean success = playerDataService.recordPlayer(frogger);
+
+    //   boolean success = records.addRecord(firstName, lastName, phoneNumber, zipCode, state, gender);
       return success;
+    }
+
+    public String getFirstName() {
+
+        return this.firstName;
+    }
+
+    public String getZipCode() {
+
+        return this.zipCode;
+    }
+
+    public String getGender() {
+
+        return this.gender;
+    }
+
+    public String getState() {
+
+        return this.state;
+    }
+
+    public String getPhoneNumber() {
+
+        return this.phoneNumber;
     }
 
 }
