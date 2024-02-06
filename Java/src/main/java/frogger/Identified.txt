@@ -1,0 +1,65 @@
+Single Responsibility Principle Violation: The Frogger class is handling too much
+responsibility. It manages frog movement, holds player information (like name,
+phone number, etc.), and interacts directly with the Road class to check for
+obstacles. This blends gameplay logic with player data management, which should
+ideally be separated.
+
+High Coupling: The Frogger class directly accesses the Road class's internal state
+(occupied array) to check if a position is occupied or valid. This design tightly
+couples the Frogger class to the Road class's implementation, making future changes
+to Road potentially problematic for Frogger.
+
+Refactoring
+
+For Single Responsibility Principle:
+
+Separate Player Information: Create a separate class for managing player information,
+like PlayerProfile or PlayerRecord, which would encapsulate attributes such as firstName,
+lastName, phoneNumber, zipCode, state, and gender. The Frogger class would then have a 
+reference to a PlayerProfile object instead of holding all these fields directly.
+
+public class PlayerProfile {
+    private String firstName, lastName, phoneNumber, zipCode, state, gender;
+    
+    // Constructor, getters, and setters
+}
+
+Frogger Class Simplification: Simplify the Frogger class to focus solely on the
+gameplay aspect, like moving the frog and interacting with the game environment.
+
+For Reducing Coupling:
+
+Encapsulation of Road Logic: Instead of exposing the occupied array directly through
+a getOccupied method, provide more abstract operations within the Road class, such as
+isOccupied(int position) and isValidPosition(int position). This way, Frogger interacts
+with Road through these abstract operations, reducing the dependency on the internal
+representation of Road.
+
+public class Road {
+    private final boolean[] occupied;
+
+    public Road(boolean[] occupied) {
+        this.occupied = occupied;
+    }
+    
+    public boolean isOccupied(int position) {
+        return occupied[position];
+    }
+    
+    public boolean isValidPosition(int position) {
+        return position >= 0 && position < occupied.length;
+    }
+}
+
+Updating Frogger Class: Modify the Frogger class to use these new methods from Road,
+thus adhering to the principle of least knowledge (or law of Demeter), where it only talks
+to its direct friends.
+
+public boolean move(boolean forward) {
+    int nextPosition = this.position + (forward ? 1 : -1);
+    if (!road.isValidPosition(nextPosition) || road.isOccupied(nextPosition)) {
+        return false;
+    }
+    this.position = nextPosition;
+    return true;
+}
